@@ -97,26 +97,38 @@ export default class RNPickerSelect extends PureComponent {
     return styleModifiers;
   }
 
+  renderArrows() {
+    if (this.props.hideArrows) {
+      return (
+        <View style={{ flex: 1, flexDirection: 'row', marginLeft: 15 }} />
+      )
+    }
+
+    return (
+      <View style={{ flex: 1, flexDirection: 'row', marginLeft: 15 }}>
+        <TouchableOpacity
+          activeOpacity={this.props.onUpArrow ? 0.5 : 1}
+          onPress={this.props.onUpArrow ? this.onUpArrow : null}
+        >
+          <View style={[styles.chevron, styles.chevronUp, this.props.onUpArrow ? styles.chevronActive : {}]} />
+        </TouchableOpacity>
+        <View style={{ marginHorizontal: 10 }} />
+        <TouchableOpacity
+          activeOpacity={this.props.onDownArrow ? 0.5 : 1}
+          onPress={this.props.onDownArrow ? this.onDownArrow : null}
+        >
+          <View style={[styles.chevron, styles.chevronDown, this.props.onDownArrow ? styles.chevronActive : {}]} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   renderDoneBar() {
     if (this.props.hideDoneBar) { return null; }
 
     return (
       <View style={[styles.modalViewMiddle, this.props.style.modalViewMiddle]}>
-        <View style={{ flex: 1, flexDirection: 'row', marginLeft: 15 }}>
-          <TouchableOpacity
-            activeOpacity={this.props.onUpArrow ? 0.5 : 1}
-            onPress={this.props.onUpArrow ? this.onUpArrow : null}
-          >
-            <View style={[styles.chevron, styles.chevronUp, this.props.onUpArrow ? styles.chevronActive : {}]} />
-          </TouchableOpacity>
-          <View style={{ marginHorizontal: 10 }} />
-          <TouchableOpacity
-            activeOpacity={this.props.onDownArrow ? 0.5 : 1}
-            onPress={this.props.onDownArrow ? this.onDownArrow : null}
-          >
-            <View style={[styles.chevron, styles.chevronDown, this.props.onDownArrow ? styles.chevronActive : {}]} />
-          </TouchableOpacity>
-        </View>
+        {this.renderArrows()}
         <TouchableWithoutFeedback
           onPress={() => { this.togglePicker(true); }}
           hitSlop={{ top: 2, right: 2, bottom: 2, left: 2 }}
@@ -245,6 +257,7 @@ RNPickerSelect.propTypes = {
     label: PropTypes.string,
     value: PropTypes.any,
   }),
+  hideArrows: PropTypes.bool,
   hideDoneBar: PropTypes.bool,
   hideIcon: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -262,6 +275,7 @@ RNPickerSelect.defaultProps = {
     value: null,
   },
   hideDoneBar: false,
+  hideArrows: false,
   hideIcon: false,
   disabled: false,
   value: undefined,
